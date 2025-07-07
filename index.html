@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title> Chistes Aleatorios</title>
+  <style>
+    body {
+      background: #1e1e2f;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+
+    h1 {
+      color: #4af;
+    }
+
+    button {
+      background-color: #4af;
+      color: #1e1e2f;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #3ac;
+    }
+
+    .chiste {
+      background: #2e2e40;
+      padding: 20px;
+      margin-top: 30px;
+      border-radius: 10px;
+      max-width: 600px;
+      text-align: center;
+      box-shadow: 0 0 10px #000;
+    }
+
+    .setup {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .delivery {
+      margin-top: 12px;
+      font-style: italic;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <h1> Chistes Aleatorios con JokeAPI</h1>
+  <button onclick="obtenerChiste()">¡Dame un chiste!</button>
+
+  <div class="chiste" id="chiste">
+    Presiona el botón para reírte un rato 
+  </div>
+
+  <script>
+    async function obtenerChiste() {
+      const url = "https://v2.jokeapi.dev/joke/Any?safe-mode";
+      const contenedor = document.getElementById('chiste');
+
+      contenedor.innerHTML = "Cargando chiste...";
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data.type === "single") {
+          contenedor.innerHTML = `<div class="setup">${data.joke}</div>`;
+        } else if (data.type === "twopart") {
+          contenedor.innerHTML = `
+            <div class="setup">${data.setup}</div>
+            <div class="delivery">${data.delivery}</div>
+          `;
+        } else {
+          contenedor.innerHTML = "No se pudo obtener un chiste ";
+        }
+      } catch (error) {
+        contenedor.innerHTML = " Error al obtener el chiste.";
+        console.error(error);
+      }
+    }
+  </script>
+
+</body>
+</html>
+
+
